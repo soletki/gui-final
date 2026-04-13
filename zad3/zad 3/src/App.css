@@ -1,0 +1,75 @@
+.dashboard {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #1f2937;
+  font-family: sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+h1,
+h2 {
+  margin: 0 0 8px;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  background: #0f766e;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.status-grid,
+.data-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.stats {
+  margin-top: 12px;
+}
+
+.loading {
+  color: #1d4ed8;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+@media (max-width: 900px) {
+  .dashboard-header {
+    flex-direction: column;
+  }
+
+  .status-grid,
+  .data-grid {
+    grid-template-columns: 1fr;
+  }
+}
