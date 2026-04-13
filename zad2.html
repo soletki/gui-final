@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			#container {
+				max-width: 400px;
+				margin: 40px auto;
+				padding: 20px;
+				border: 1px solid #ccc;
+				border-radius: 8px;
+				background-color: #f9f9f9;
+			}
+            
+            #input-form {
+                display: flex;
+                flex-direction: column;
+            }
+
+			#todo-input {
+				padding: 10px;
+				margin-bottom: 10px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+			}
+
+			#todo-submit {
+				padding: 10px 20px;
+				border: none;
+				border-radius: 4px;
+				background-color: #28a745;
+				color: white;
+				cursor: pointer;
+			}
+
+            #todo-submit:hover {
+                background-color: #218838;
+            }
+
+            #todo-list {
+                list-style: none;
+                padding: 10px;
+            }
+
+            #todo-list li {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                border-bottom: 1px solid #ccc;
+                padding: 8px;
+            }
+
+            #todo-list li.completed {
+                background-color: #e0e0e0;
+            }
+
+            #todo-list li .delete-btn {
+                background-color: transparent;
+                border: none;
+                color: #dc3545;
+                cursor: pointer;
+            }
+
+            #todo-list li span{
+                flex: 1;
+                width: 100%;
+                margin-left: 10px;
+                word-wrap: break-word;
+            }
+
+            .completed span {
+                text-decoration: line-through;
+                color: #888;
+            }
+
+            #stats {
+                margin-top: 20px;
+            }
+
+            #filters {
+                margin-top: 10px;
+                display: flex;
+                justify-content: center;
+            }
+
+            #filters button {
+                margin-right: 10px;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 4px;
+                background-color: #007bff;
+                color: white;
+                cursor: pointer;
+            }
+
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<form id="input-form">
+				<input
+					type="text"
+					id="todo-input"
+					placeholder="Добавете нова задача..."
+				/>
+				<button id="todo-submit" type="button" onclick="addTodo()">Добави</button>  
+				<p id="error" style="color: red"></p>
+			</form>     
+            
+            <div id="filters">
+                <button onclick="setFilter('all')">Всички</button>
+                <button onclick="setFilter('active')">Активни</button>
+                <button onclick="setFilter('completed')">Завършени</button>
+            </div>
+
+            <div id="stats">
+                <h3>Задачи</h3>
+                <p id="counter">0 от 0 задачи завършени</p>
+            </div>
+
+			<ul id="todo-list"></ul>
+		</div>
+	</body>
+
+	<script>
+		function loadTodos() {
+			const saved = localStorage.getItem('todos');
+			return saved ? JSON.parse(saved) : [];
+		}
+
+		function saveTodos(todos) {
+			localStorage.setItem('todos', JSON.stringify(todos));
+		}
+
+		let todos = loadTodos();
+		let filter = 'all';
+
+		function renderTodos() {
+			const list = document.querySelector('#todo-list');
+			list.innerHTML = '';
+
+			const filtered = todos.filter((todo) => {
+				if (filter === 'active') return !todo.completed;
+				if (filter === 'completed') return todo.completed;
+				return true;
+			});
+
+			filtered.forEach((todo) => {
+				const li = document.createElement('li');
+				li.className = todo.completed
+					? 'todo-item completed'
+					: 'todo-item';
+				li.dataset.id = todo.id;
+				li.innerHTML = `
+                    <input type="checkbox" ${todo.completed ? 'checked' : ''} />
+                    <span>${todo.text}</span>
+                    <button class="delete-btn">X</button>
+                `;
+
+				list.appendChild(li);
+			});
+
+			const done = todos.filter((t) => t.completed).length;
+			document.querySelector('#counter').textContent =
+				done + ' от ' + todos.length + ' задачи завършени';
+		}
+
+		document.querySelector('#todo-list').addEventListener('click', (e) => {
+
+			const li = e.target.closest('.todo-item');
+			if (!li) return;
+			const id = Number(li.dataset.id);
+
+			if (e.target.type === 'checkbox') {
+				todos = todos.map((t) =>
+					t.id === id ? { ...t, completed: !t.completed } : t,
+				);
+				saveTodos(todos);
+				renderTodos();
+			}
+
+			if (e.target.classList.contains('delete-btn')) {
+				todos = todos.filter((t) => t.id !== id);
+				saveTodos(todos);
+				renderTodos();
+			}
+		});
+
+        function setFilter(newFilter) {
+            filter = newFilter;
+            renderTodos();
+        }
+
+		function addTodo() {
+			const input = document.querySelector('#todo-input');
+			const text = input.value.trim();
+
+			if (!text) {
+				document.querySelector('#error').textContent =
+					'Въведете задача!';
+				return;
+			}
+
+			document.querySelector('#error').textContent = '';
+			todos.push({ id: Date.now(), text, completed: false });
+			saveTodos(todos);
+			input.value = '';
+			renderTodos();
+		}
+
+		document
+			.querySelector('#todo-input')
+			.addEventListener('keydown', (e) => {
+				if (e.key === 'Enter') addTodo();
+			});
+
+		renderTodos();
+	</script>
+</html>
