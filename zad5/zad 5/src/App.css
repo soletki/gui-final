@@ -1,0 +1,161 @@
+﻿* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	font-family: Arial, sans-serif;
+	background: #f5f6f8;
+	color: #1f2937;
+}
+
+#root {
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.app-shell h1 {
+	margin: 0 0 16px;
+}
+
+.dashboard {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	gap: 8px;
+	margin-bottom: 16px;
+}
+
+.dashboard div {
+	background: #ffffff;
+	border: 1px solid #d1d5db;
+	border-radius: 8px;
+	padding: 10px;
+	font-size: 14px;
+}
+
+.task-form,
+.filter-bar {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.task-form input,
+.task-form select,
+.filter-bar input,
+.filter-bar select {
+	padding: 8px;
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+}
+
+.task-form input,
+.filter-bar input {
+	flex: 1;
+}
+
+button {
+	border: 1px solid #2563eb;
+	background: #2563eb;
+	color: #fff;
+	border-radius: 6px;
+	padding: 8px 12px;
+	cursor: pointer;
+}
+
+button:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+button.danger {
+	border-color: #dc2626;
+	background: #dc2626;
+}
+
+.kanban-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.kanban-column {
+	background: #ffffff;
+	border: 1px solid #d1d5db;
+	border-radius: 10px;
+	padding: 10px;
+	min-height: 320px;
+}
+
+.kanban-column h3 {
+	margin: 0 0 10px;
+}
+
+.column-body {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.task-card {
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	padding: 10px;
+	background: #f8fafc;
+}
+
+.task-card h4 {
+	margin: 0 0 8px;
+	font-size: 15px;
+}
+
+.task-meta {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	gap: 8px;
+}
+
+.task-meta small {
+	color: #64748b;
+	font-size: 12px;
+}
+
+.badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 999px;
+	color: #fff;
+	font-size: 12px;
+	text-transform: uppercase;
+}
+
+.badge.low {
+	background: #16a34a;
+}
+
+.badge.medium {
+	background: #d97706;
+}
+
+.badge.high {
+	background: #dc2626;
+}
+
+.task-actions {
+	display: flex;
+	gap: 8px;
+}
+
+@media (max-width: 900px) {
+	.kanban-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.task-form,
+	.filter-bar {
+		flex-direction: column;
+	}
+}
